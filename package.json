@@ -1,0 +1,29 @@
+{
+	"name": "weather-color-settings",
+	"version": "0.1.0",
+	"author": "cirrahn",
+	"type": "module",
+	"license": "MIT",
+	"scripts": {
+		"build": "cross-env NODE_ENV=development rollup --config rollup.config.js --watch",
+		"release": "cross-env NODE_ENV=production rollup --config rollup.config.js ",
+		"test": "npm run test:js && npm run test:css",
+		"test:js": "eslint module/js foundry-path.js rollup.config.js",
+		"lint:js": "npm run test:js -- --fix",
+		"test:css": "stylelint module/scss/*.scss",
+		"lint:css": "npm run test:css -- --fix",
+		"lint": "npm run lint:js && npm run lint:css"
+	},
+	"devDependencies": {
+		"@league-of-foundry-developers/foundry-vtt-types": "^9.280.0",
+		"cross-env": "^7.0.3",
+		"eslint": "^8.42.0",
+		"rollup": "^3.24.0",
+		"rollup-plugin-copy": "^3.4.0",
+		"rollup-plugin-scss": "^4.0.0",
+		"rollup-plugin-watch": "^1.0.2",
+		"sass": "^1.62.1",
+		"stylelint": "^15.7.0",
+		"stylelint-config-sass-guidelines": "^10.0.0"
+	}
+}

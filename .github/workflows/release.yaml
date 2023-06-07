@@ -1,0 +1,35 @@
+name: Create Release
+
+on:
+   push:
+      tags:
+         - 'v**'
+
+   workflow_dispatch:
+
+concurrency:
+   cancel-in-progress: true
+   group: "release"
+
+jobs:
+   build-and-deploy:
+      runs-on: ubuntu-latest
+      steps:
+         -  uses: actions/checkout@master
+
+         -  name: Build
+            run: |
+               npm i
+               npm run release
+
+         -  name: Zip
+            run: |
+               pushd dist/weather-color-settings
+               zip -r ../weather-color-settings.zip .
+               popd
+
+         -  name: Upload
+            run: |
+               hub release create -a dist/weather-color-settings.zip -a dist/weather-color-settings/module.json -m "${{ github.ref_name }}" ${{ github.ref_name }}
+            env:
+               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

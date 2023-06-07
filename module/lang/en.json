@@ -1,0 +1,4 @@
+{
+	"DSNMSFXT.Squash Clashing SFX": "Squash Clashing SFX",
+	"DSNMSFXT.When dnd5e-specific SFX is triggered for a roll (e.g., when rolling a skill), and non-dnd5e-specific SFX is triggered (e.g., when rolling a d20 value), squash the latter SFX if both would trigger for the same roll.": "When dnd5e-specific SFX is triggered for a roll (e.g., when rolling a skill), and non-dnd5e-specific SFX is triggered (e.g., when rolling a d20 value), squash the latter SFX if both would trigger for the same roll."
+}

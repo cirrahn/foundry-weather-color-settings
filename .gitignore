@@ -1,0 +1,14 @@
+# IDE Files
+.idea/
+*.iml
+*.vcs
+.vscode
+
+# Node
+node_modules
+
+# Scratch files
+scratch/
+
+# Config files
+foundryconfig.json

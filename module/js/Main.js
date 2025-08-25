@@ -59,20 +59,10 @@ class WeatherColorManager {
 
 		libWrapper.register(
 			Consts.MODULE_ID,
-			`SceneConfig.prototype._onChangeInput`,
+			`foundry.applications.sheets.SceneConfig.prototype._onChangeForm`,
 			(fn, ...args) => {
-				const [evt] = args;
+				const [, evt] = args;
 				if (evt.target.name?.startsWith(this._FLAG_PREFIX)) setTempVal(evt.target.name, evt.target.value);
-				return fn(...args);
-			},
-			"WRAPPER",
-		);
-
-		libWrapper.register(
-			Consts.MODULE_ID,
-			`SceneConfig.prototype._onChangeColorPicker`,
-			(fn, ...args) => {
-				const [evt] = args;
 				if (evt.target.dataset?.edit?.startsWith(this._FLAG_PREFIX)) setTempVal(evt.target.dataset.edit, evt.target.value);
 				return fn(...args);
 			},
@@ -81,7 +71,7 @@ class WeatherColorManager {
 
 		libWrapper.register(
 			Consts.MODULE_ID,
-			`SceneConfig.prototype._previewScene`,
+			`foundry.applications.sheets.SceneConfig.prototype._previewScene`,
 			(fn, ...args) => {
 				const out = fn(...args);
 				const [changed] = args;
@@ -94,7 +84,7 @@ class WeatherColorManager {
 
 		libWrapper.register(
 			Consts.MODULE_ID,
-			`SceneConfig.prototype._onSubmit`,
+			`foundry.applications.sheets.SceneConfig.prototype._processSubmitData`,
 			async (fn, ...args) => {
 				this._resetScenePreview();
 				return fn(...args);
@@ -104,7 +94,7 @@ class WeatherColorManager {
 
 		libWrapper.register(
 			Consts.MODULE_ID,
-			`SceneConfig.prototype.close`,
+			`foundry.applications.sheets.SceneConfig.prototype.close`,
 			async (fn, ...args) => {
 				if (this._resetScenePreview()) canvas.weather.draw();
 				return fn(...args);
@@ -116,7 +106,7 @@ class WeatherColorManager {
 	static _onHook_init_fragmentShader () {
 		libWrapper.register(
 			Consts.MODULE_ID,
-			`FogShader.fragmentShader`,
+			`foundry.canvas.rendering.shaders.FogShader.fragmentShader`,
 			(fn, ...args) => {
 				const out = fn(...args);
 				const colorRaw = this._TEMP_VALUES["color-fog"] ?? canvas.scene.getFlag(Consts.MODULE_ID, "color-fog");
@@ -133,8 +123,8 @@ class WeatherColorManager {
 		);
 
 		// Can't use libWrapper as this is a static property, not a getter
-		const RainShader_fragmentShader = RainShader.fragmentShader;
-		Object.defineProperty(RainShader, "fragmentShader", {
+		const RainShader_fragmentShader = foundry.canvas.rendering.shaders.RainShader.fragmentShader;
+		Object.defineProperty(foundry.canvas.rendering.shaders.RainShader, "fragmentShader", {
 			get () {
 				const colorRaw = WeatherColorManager._TEMP_VALUES["color-rain"] ?? canvas.scene.getFlag(Consts.MODULE_ID, "color-rain");
 				if (!colorRaw) return RainShader_fragmentShader;
@@ -149,8 +139,8 @@ class WeatherColorManager {
 		});
 
 		// Can't use libWrapper as this is a static property, not a getter
-		const SnowShader_fragmentShader = SnowShader.fragmentShader;
-		Object.defineProperty(SnowShader, "fragmentShader", {
+		const SnowShader_fragmentShader = foundry.canvas.rendering.shaders.SnowShader.fragmentShader;
+		Object.defineProperty(foundry.canvas.rendering.shaders.SnowShader, "fragmentShader", {
 			get () {
 				const colorRaw = WeatherColorManager._TEMP_VALUES["color-snow"] ?? canvas.scene.getFlag(Consts.MODULE_ID, "color-snow");
 				if (!colorRaw) return SnowShader_fragmentShader;
@@ -167,28 +157,18 @@ class WeatherColorManager {
 
 	/* -------------------------------------------- */
 
-	static _onHook_renderSceneConfig (app, $html, options) {
+	static _onHook_renderSceneConfig (app, html, options) {
+		const $html = $(html);
 		const $wrpWeather = $html.find(`select[name="weather"]`).closest(".form-group");
 
 		const $getRowFlag = ({name, flag}) => {
 			const flagVal = canvas.scene.getFlag(Consts.MODULE_ID, flag);
 
-			const $iptColor = $(`<input class="color" type="text" name="flags.${Consts.MODULE_ID}.${flag}" value="${flagVal || ""}">`);
-
-			const $iptColorRgb = $(`<input type="color" data-edit="flags.${Consts.MODULE_ID}.${flag}" value="${flagVal || ""}">`);
-
-			const $btnColorClear = $(`<button type="button" title="Clear"><i class="fas fa-xmark fa-fw"></i></button>`)
-				.on("click", async (evt) => {
-					evt.preventDefault();
-					if (!canvas.ready) return;
-					$iptColor.val("").trigger("change");
-				});
+			const $picker = $(`<color-picker name="flags.${Consts.MODULE_ID}.${flag}" value="${flagVal || ""}"></color-picker>`);
 
 			return $(`<div class="form-fields weathercl__row-flag"></div>`)
 				.append(`<div class="weathercl__lbl-flag">${name}</div>`)
-				.append($iptColor)
-				.append($iptColorRgb)
-				.append($btnColorClear);
+				.append($picker);
 		};
 
 		$(`<div class="form-group"></div>`)
@@ -197,7 +177,7 @@ class WeatherColorManager {
 				$(`<div class="flexcol"></div>`)
 					.append(this._FLAGS.map($getRowFlag)),
 			)
-			.append($(`<p class="notes">Adjust the coloration of the active Weather Effect(s).</p>`))
+			.append($(`<p class="hint">Adjust the coloration of the active Weather Effect(s).</p>`))
 			.insertAfter($wrpWeather);
 
 		app.setPosition({

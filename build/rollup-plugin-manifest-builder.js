@@ -18,7 +18,7 @@ export class RollupManifestBuilder {
 						{
 							"name": "cirrahn",
 							"url": "https://www.patreon.com/cirrahn",
-							"discord": "Murray#3081",
+							"discord": "cirrahn",
 							"flags": {
 								"patreon": "cirrahn",
 								"github": "cirrahn"
@@ -43,7 +43,7 @@ export class RollupManifestBuilder {
 
 					"compatibility": {
 						"minimum": "11",
-						"verified": "11.300"
+						"verified": "12.343"
 					},
 					"esmodules": [
 						"module.js"

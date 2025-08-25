@@ -15,7 +15,6 @@
 		"lint": "npm run lint:js && npm run lint:css"
 	},
 	"devDependencies": {
-		"@league-of-foundry-developers/foundry-vtt-types": "^9.280.0",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.42.0",
 		"rollup": "^3.24.0",

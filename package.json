@@ -17,10 +17,9 @@
 	"devDependencies": {
 		"cross-env": "^7.0.3",
 		"eslint": "^8.42.0",
-		"rollup": "^3.24.0",
-		"rollup-plugin-copy": "^3.4.0",
-		"rollup-plugin-scss": "^4.0.0",
-		"rollup-plugin-watch": "^1.0.2",
+		"rollup": "^4.48.1",
+		"rollup-plugin-copy": "^3.5.0",
+		"rollup-plugin-scss": "^4.0.1",
 		"sass": "^1.62.1",
 		"stylelint": "^15.7.0",
 		"stylelint-config-sass-guidelines": "^10.0.0"

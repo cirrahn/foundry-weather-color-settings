@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import copy from "rollup-plugin-copy";
-import watch from "rollup-plugin-watch";
 import scss from "rollup-plugin-scss";
 import {getBuildPath} from "./foundry-path.js";
 import {RollupManifestBuilder} from "./build/rollup-plugin-manifest-builder.js";
@@ -25,16 +24,7 @@ export default {
 				{src: "module/lang/*", dest: path.join(systemPath, "lang")},
 			],
 		}),
-		process.env.NODE_ENV === "production"
-			? null
-			// FIXME this does not track *new* files, only changes/deletions to existing files
-			: watch({
-				dir: path.join(process.cwd(), "module"),
-				include: [
-					/module\/(lang)(\/.*)?/,
-				],
-			}),
-	].filter(Boolean),
+	],
 	onwarn (warning, warn) {
 		// suppress eval warnings
 		if (warning.code === "EVAL") return;
